@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#3a5a2c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Gestión de rutas de reparto Europan — PWA móvil">
+  <title>Rutas Europan</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ SCREEN 1: SELECTOR ============ -->
+  <section id="screen-selector" class="screen active">
+    <header class="app-header">
+      <h1>🚛 Rutas Europan</h1>
+    </header>
+
+    <div class="selector-content">
+      <div class="selector-group">
+        <label class="selector-label">Ruta</label>
+        <div class="toggle-group" id="ruta-selector">
+          <button class="toggle-btn" data-value="2">2</button>
+          <button class="toggle-btn" data-value="3">3</button>
+          <button class="toggle-btn" data-value="4">4</button>
+          <button class="toggle-btn" data-value="5">5</button>
+        </div>
+      </div>
+
+      <div class="selector-group">
+        <label class="selector-label">Día</label>
+        <div class="toggle-group" id="dia-selector">
+          <button class="toggle-btn" data-value="Lunes">L</button>
+          <button class="toggle-btn" data-value="Martes">M</button>
+          <button class="toggle-btn" data-value="Miércoles">X</button>
+          <button class="toggle-btn" data-value="Jueves">J</button>
+          <button class="toggle-btn" data-value="Viernes">V</button>
+        </div>
+      </div>
+
+      <button id="btn-ver-ruta" class="btn-primary btn-xl" disabled>
+        Ver ruta →
+      </button>
+
+      <button id="btn-buscar-global" class="btn-secondary btn-xl">
+        🔍 Buscar cliente
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: ROUTE LIST ============ -->
+  <section id="screen-ruta" class="screen">
+    <header class="app-header">
+      <button id="btn-back-selector" class="header-btn" aria-label="Volver">←</button>
+      <h1 id="ruta-title">Ruta</h1>
+      <button id="btn-search-from-list" class="header-btn" aria-label="Buscar">🔍</button>
+    </header>
+
+    <div id="client-list" class="client-list">
+      <!-- Contenido dinámico -->
+    </div>
+
+    <button id="btn-add-client" class="fab" title="Añadir cliente" aria-label="Añadir cliente">+</button>
+  </section>
+
+  <!-- ============ SCREEN 3: SEARCH ============ -->
+  <section id="screen-buscar" class="screen">
+    <header class="app-header search-header">
+      <button id="btn-back-from-search" class="header-btn" aria-label="Volver">←</button>
+      <div class="search-input-wrapper">
+        <input type="text" id="search-input" placeholder="Buscar cliente o dirección…" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+    </header>
+
+    <div id="search-results" class="client-list">
+      <!-- Contenido dinámico -->
+    </div>
+
+    <div class="fixed-bottom">
+      <button id="btn-volver-ruta" class="btn-primary btn-xl">
+        ← Volver a la ruta
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ EDIT / ADD MODAL ============ -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <h2 id="modal-title">Editar cliente</h2>
+      <form id="edit-form">
+        <!-- Campos dinámicos generados por JS -->
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ LOADING OVERLAY ============ -->
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
