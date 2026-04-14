@@ -177,12 +177,12 @@ function updateVerRutaButton() {
 
 // ==================== DEMO DATA ==============================
 const DEMO_CLIENTS = [
-  { rowIndex: 2, orden: 1, cliente: 'Panadería López', direccion1: 'C/ Gran Vía 15, Madrid', mapsUrl1: 'https://maps.google.com/?q=Gran+Via+15+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Entregar antes de las 8:00', telefono: '600123456' },
-  { rowIndex: 3, orden: 2, cliente: 'Bar El Cruce', direccion1: 'Av. de la Constitución 42', mapsUrl1: 'https://maps.google.com/?q=Av+Constitucion+42', direccion2: 'C/ Sierpes 8, local 2', mapsUrl2: 'https://maps.google.com/?q=Sierpes+8', tipoDescarga: 'ambas', notas: '', telefono: '' },
-  { rowIndex: 4, orden: 3, cliente: 'Hotel Reina Victoria', direccion1: 'Plaza Santa Ana 14', mapsUrl1: 'https://maps.google.com/?q=Plaza+Santa+Ana+14', direccion2: 'C/ Huertas 3, cocina', mapsUrl2: 'https://maps.google.com/?q=Huertas+3', tipoDescarga: 'elegir', notas: 'Preguntar por Marcos', telefono: '915678901' },
-  { rowIndex: 5, orden: 4, cliente: 'Supermercado Día', direccion1: 'C/ Alcalá 120', mapsUrl1: 'https://maps.google.com/?q=Alcala+120+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Muelle de carga trasero', telefono: '' },
-  { rowIndex: 6, orden: 5, cliente: 'Cafetería Central', direccion1: 'Paseo del Prado 28', mapsUrl1: 'https://maps.google.com/?q=Paseo+Prado+28', direccion2: 'C/ Moratín 5', mapsUrl2: 'https://maps.google.com/?q=Moratin+5', tipoDescarga: 'ambas', notas: '', telefono: '' },
-  { rowIndex: 7, orden: 6, cliente: 'Restaurante Mar Azul', direccion1: 'C/ Serrano 55', mapsUrl1: 'https://maps.google.com/?q=Serrano+55', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Solo martes y jueves', telefono: '688999111' },
+  { rowIndex: 2, orden: 1, cliente: 'Panadería López', direccion1: 'C/ Gran Vía 15, Madrid', mapsUrl1: 'https://maps.google.com/?q=Gran+Via+15+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Entregar antes de las 8:00', telefono1: '600123456', telefono2: '' },
+  { rowIndex: 3, orden: 2, cliente: 'Bar El Cruce', direccion1: 'Av. de la Constitución 42', mapsUrl1: 'https://maps.google.com/?q=Av+Constitucion+42', direccion2: 'C/ Sierpes 8, local 2', mapsUrl2: 'https://maps.google.com/?q=Sierpes+8', tipoDescarga: 'ambas', notas: '', telefono1: '', telefono2: '' },
+  { rowIndex: 4, orden: 3, cliente: 'Hotel Reina Victoria', direccion1: 'Plaza Santa Ana 14', mapsUrl1: 'https://maps.google.com/?q=Plaza+Santa+Ana+14', direccion2: 'C/ Huertas 3, cocina', mapsUrl2: 'https://maps.google.com/?q=Huertas+3', tipoDescarga: 'elegir', notas: 'Preguntar por Marcos', telefono1: '915678901', telefono2: '611222333' },
+  { rowIndex: 5, orden: 4, cliente: 'Supermercado Día', direccion1: 'C/ Alcalá 120', mapsUrl1: 'https://maps.google.com/?q=Alcala+120+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Muelle de carga trasero', telefono1: '', telefono2: '' },
+  { rowIndex: 6, orden: 5, cliente: 'Cafetería Central', direccion1: 'Paseo del Prado 28', mapsUrl1: 'https://maps.google.com/?q=Paseo+Prado+28', direccion2: 'C/ Moratín 5', mapsUrl2: 'https://maps.google.com/?q=Moratin+5', tipoDescarga: 'ambas', notas: '', telefono1: '', telefono2: '' },
+  { rowIndex: 7, orden: 6, cliente: 'Restaurante Mar Azul', direccion1: 'C/ Serrano 55', mapsUrl1: 'https://maps.google.com/?q=Serrano+55', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Solo martes y jueves', telefono1: '688999111', telefono2: '' },
 ];
 
 function isDemoMode() {
@@ -307,7 +307,11 @@ function renderClientCard(client, index, total) {
 
   // Botones de Maps según tipo de descarga
   let mapsHtml = '';
-  const btnLlamar = client.telefono ? `<a href="tel:${esc(client.telefono)}" class="btn-maps" style="background:var(--primary-dark); flex: 0.8 !important;">📞</a>` : '';
+  let btnLlamar = '';
+  if (client.telefono1 || client.telefono2) {
+    btnLlamar += client.telefono1 ? `<a href="tel:${esc(client.telefono1)}" class="btn-maps" style="background:var(--primary-dark); flex: 0.8 !important;" title="Llamar Tel 1">📞 1</a>` : '';
+    btnLlamar += client.telefono2 ? `<a href="tel:${esc(client.telefono2)}" class="btn-maps" style="background:var(--primary-dark); flex: 0.8 !important;" title="Llamar Tel 2">📞 2</a>` : '';
+  }
 
   if (tipo === 'ambas') {
     mapsHtml = `
@@ -425,8 +429,13 @@ function showEditModal(index) {
     </div>
 
     <div class="form-group">
-      <label for="edit-telefono">Teléfono</label>
-      <input type="tel" id="edit-telefono" value="${esc(client.telefono || '')}">
+      <label for="edit-telefono1">Teléfono 1</label>
+      <input type="tel" id="edit-telefono1" value="${esc(client.telefono1 || '')}">
+    </div>
+
+    <div class="form-group">
+      <label for="edit-telefono2">Teléfono 2</label>
+      <input type="tel" id="edit-telefono2" value="${esc(client.telefono2 || '')}">
     </div>
 
     <div class="form-group">
@@ -508,8 +517,13 @@ function showAddClientModal() {
     </div>
 
     <div class="form-group">
-      <label for="edit-telefono">Teléfono</label>
-      <input type="tel" id="edit-telefono" value="">
+      <label for="edit-telefono1">Teléfono 1</label>
+      <input type="tel" id="edit-telefono1" value="">
+    </div>
+
+    <div class="form-group">
+      <label for="edit-telefono2">Teléfono 2</label>
+      <input type="tel" id="edit-telefono2" value="">
     </div>
 
     <div class="form-group">
@@ -675,7 +689,8 @@ function getFormData() {
     mapsUrl2: $('edit-mapsUrl2').value.trim(),
     tipoDescarga: $('edit-tipo').value,
     notas: $('edit-notas').value.trim(),
-    telefono: $('edit-telefono').value.trim()
+    telefono1: $('edit-telefono1').value.trim(),
+    telefono2: $('edit-telefono2').value.trim()
   };
 }
 
@@ -772,7 +787,12 @@ function renderSearchResults(results, query) {
   container.innerHTML = results.map((client, i) => {
     const tipo = (client.tipoDescarga || 'única').toLowerCase().trim();
     let mapsHtml = '';
-    const btnLlamar = client.telefono ? `<a href="tel:${esc(client.telefono)}" class="btn-maps btn-maps-sm" style="background:var(--primary-dark); flex: 0.8 !important;">📞</a>` : '';
+    
+    let btnLlamar = '';
+    if (client.telefono1 || client.telefono2) {
+      btnLlamar += client.telefono1 ? `<a href="tel:${esc(client.telefono1)}" class="btn-maps btn-maps-sm" style="background:var(--primary-dark); flex: 0.8 !important;" title="Llamar Tel 1">📞 1</a>` : '';
+      btnLlamar += client.telefono2 ? `<a href="tel:${esc(client.telefono2)}" class="btn-maps btn-maps-sm" style="background:var(--primary-dark); flex: 0.8 !important;" title="Llamar Tel 2">📞 2</a>` : '';
+    }
 
     if (tipo === 'ambas') {
       mapsHtml = `
