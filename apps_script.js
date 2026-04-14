@@ -5,7 +5,7 @@
 // Desplegar como: Aplicación web → Cualquier persona
 // ============================================================
 
-const HEADERS = ['Orden', 'Cliente', 'Dirección_1', 'Maps_URL_1', 'Dirección_2', 'Maps_URL_2', 'Tipo_descarga', 'Notas'];
+const HEADERS = ['Orden', 'Cliente', 'Dirección_1', 'Maps_URL_1', 'Dirección_2', 'Maps_URL_2', 'Tipo_descarga', 'Notas', 'Teléfono'];
 
 // ==================== HTTP HANDLERS ==========================
 
@@ -90,7 +90,7 @@ function getRoute(ruta, dia) {
     return { success: true, data: [], sheetName: sheetName };
   }
 
-  const data = sheet.getRange(2, 1, lastRow - 1, 8).getValues();
+  const data = sheet.getRange(2, 1, lastRow - 1, 9).getValues();
   const clients = data
     .map((row, index) => ({
       rowIndex: index + 2,
@@ -101,7 +101,8 @@ function getRoute(ruta, dia) {
       direccion2: row[4],
       mapsUrl2: row[5],
       tipoDescarga: row[6],
-      notas: row[7]
+      notas: row[7],
+      telefono: row[8] || ''
     }))
     .filter(c => c.cliente !== '');
 
@@ -130,7 +131,7 @@ function getAllClients() {
       const lastRow = sheet.getLastRow();
       if (lastRow <= 1) continue;
 
-      const data = sheet.getRange(2, 1, lastRow - 1, 8).getValues();
+      const data = sheet.getRange(2, 1, lastRow - 1, 9).getValues();
       data.forEach((row, index) => {
         if (row[1] !== '') {
           allClients.push({
@@ -145,7 +146,8 @@ function getAllClients() {
             direccion2: row[4],
             mapsUrl2: row[5],
             tipoDescarga: row[6],
-            notas: row[7]
+            notas: row[7],
+            telefono: row[8] || ''
           });
         }
       });
@@ -180,7 +182,8 @@ function updateClientData(sheetName, row, data) {
     direccion2: 5,
     mapsUrl2: 6,
     tipoDescarga: 7,
-    notas: 8
+    notas: 8,
+    telefono: 9
   };
 
   for (const [key, col] of Object.entries(fieldMap)) {
@@ -212,7 +215,7 @@ function addClientData(sheetName, data) {
   // Si no se especifica orden, usar el último + 1
   const orden = data.orden || (lastRow > 1 ? Number(sheet.getRange(lastRow, 1).getValue()) + 1 : 1);
 
-  sheet.getRange(newRow, 1, 1, 8).setValues([[
+  sheet.getRange(newRow, 1, 1, 9).setValues([[
     orden,
     data.cliente || '',
     data.direccion1 || '',
@@ -220,7 +223,8 @@ function addClientData(sheetName, data) {
     data.direccion2 || '',
     data.mapsUrl2 || '',
     data.tipoDescarga || 'única',
-    data.notas || ''
+    data.notas || '',
+    data.telefono || ''
   ]]);
 
   return { success: true, rowIndex: newRow };
@@ -290,10 +294,10 @@ function setupHeaders() {
       }
 
       // Cabeceras en fila 1
-      sheet.getRange(1, 1, 1, 8).setValues([HEADERS]);
-      sheet.getRange(1, 1, 1, 8).setFontWeight('bold');
-      sheet.getRange(1, 1, 1, 8).setBackground('#3a5a2c');
-      sheet.getRange(1, 1, 1, 8).setFontColor('#ffffff');
+      sheet.getRange(1, 1, 1, 9).setValues([HEADERS]);
+      sheet.getRange(1, 1, 1, 9).setFontWeight('bold');
+      sheet.getRange(1, 1, 1, 9).setBackground('#3a5a2c');
+      sheet.getRange(1, 1, 1, 9).setFontColor('#ffffff');
 
       // Ajustar anchos de columna
       sheet.setColumnWidth(1, 60);   // Orden
@@ -304,6 +308,7 @@ function setupHeaders() {
       sheet.setColumnWidth(6, 250);  // Maps_URL_2
       sheet.setColumnWidth(7, 120);  // Tipo_descarga
       sheet.setColumnWidth(8, 200);  // Notas
+      sheet.setColumnWidth(9, 120);  // Teléfono
 
       // Validación para Tipo_descarga (columna G)
       const tipoRule = SpreadsheetApp.newDataValidation()

@@ -177,12 +177,12 @@ function updateVerRutaButton() {
 
 // ==================== DEMO DATA ==============================
 const DEMO_CLIENTS = [
-  { rowIndex: 2, orden: 1, cliente: 'Panadería López', direccion1: 'C/ Gran Vía 15, Madrid', mapsUrl1: 'https://maps.google.com/?q=Gran+Via+15+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Entregar antes de las 8:00' },
-  { rowIndex: 3, orden: 2, cliente: 'Bar El Cruce', direccion1: 'Av. de la Constitución 42', mapsUrl1: 'https://maps.google.com/?q=Av+Constitucion+42', direccion2: 'C/ Sierpes 8, local 2', mapsUrl2: 'https://maps.google.com/?q=Sierpes+8', tipoDescarga: 'ambas', notas: '' },
-  { rowIndex: 4, orden: 3, cliente: 'Hotel Reina Victoria', direccion1: 'Plaza Santa Ana 14', mapsUrl1: 'https://maps.google.com/?q=Plaza+Santa+Ana+14', direccion2: 'C/ Huertas 3, cocina', mapsUrl2: 'https://maps.google.com/?q=Huertas+3', tipoDescarga: 'elegir', notas: 'Preguntar por Marcos' },
-  { rowIndex: 5, orden: 4, cliente: 'Supermercado Día', direccion1: 'C/ Alcalá 120', mapsUrl1: 'https://maps.google.com/?q=Alcala+120+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Muelle de carga trasero' },
-  { rowIndex: 6, orden: 5, cliente: 'Cafetería Central', direccion1: 'Paseo del Prado 28', mapsUrl1: 'https://maps.google.com/?q=Paseo+Prado+28', direccion2: 'C/ Moratín 5', mapsUrl2: 'https://maps.google.com/?q=Moratin+5', tipoDescarga: 'ambas', notas: '' },
-  { rowIndex: 7, orden: 6, cliente: 'Restaurante Mar Azul', direccion1: 'C/ Serrano 55', mapsUrl1: 'https://maps.google.com/?q=Serrano+55', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Solo martes y jueves' },
+  { rowIndex: 2, orden: 1, cliente: 'Panadería López', direccion1: 'C/ Gran Vía 15, Madrid', mapsUrl1: 'https://maps.google.com/?q=Gran+Via+15+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Entregar antes de las 8:00', telefono: '600123456' },
+  { rowIndex: 3, orden: 2, cliente: 'Bar El Cruce', direccion1: 'Av. de la Constitución 42', mapsUrl1: 'https://maps.google.com/?q=Av+Constitucion+42', direccion2: 'C/ Sierpes 8, local 2', mapsUrl2: 'https://maps.google.com/?q=Sierpes+8', tipoDescarga: 'ambas', notas: '', telefono: '' },
+  { rowIndex: 4, orden: 3, cliente: 'Hotel Reina Victoria', direccion1: 'Plaza Santa Ana 14', mapsUrl1: 'https://maps.google.com/?q=Plaza+Santa+Ana+14', direccion2: 'C/ Huertas 3, cocina', mapsUrl2: 'https://maps.google.com/?q=Huertas+3', tipoDescarga: 'elegir', notas: 'Preguntar por Marcos', telefono: '915678901' },
+  { rowIndex: 5, orden: 4, cliente: 'Supermercado Día', direccion1: 'C/ Alcalá 120', mapsUrl1: 'https://maps.google.com/?q=Alcala+120+Madrid', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Muelle de carga trasero', telefono: '' },
+  { rowIndex: 6, orden: 5, cliente: 'Cafetería Central', direccion1: 'Paseo del Prado 28', mapsUrl1: 'https://maps.google.com/?q=Paseo+Prado+28', direccion2: 'C/ Moratín 5', mapsUrl2: 'https://maps.google.com/?q=Moratin+5', tipoDescarga: 'ambas', notas: '', telefono: '' },
+  { rowIndex: 7, orden: 6, cliente: 'Restaurante Mar Azul', direccion1: 'C/ Serrano 55', mapsUrl1: 'https://maps.google.com/?q=Serrano+55', direccion2: '', mapsUrl2: '', tipoDescarga: 'única', notas: 'Solo martes y jueves', telefono: '688999111' },
 ];
 
 function isDemoMode() {
@@ -307,12 +307,14 @@ function renderClientCard(client, index, total) {
 
   // Botones de Maps según tipo de descarga
   let mapsHtml = '';
+  const btnLlamar = client.telefono ? `<a href="tel:${esc(client.telefono)}" class="btn-maps" style="background:var(--primary-dark); flex: 0.8 !important;">📞</a>` : '';
 
   if (tipo === 'ambas') {
     mapsHtml = `
       <div class="maps-buttons">
         ${client.mapsUrl1 ? `<a href="${esc(client.mapsUrl1)}" target="_blank" rel="noopener" class="btn-maps">📍 Parada 1</a>` : ''}
         ${client.mapsUrl2 ? `<a href="${esc(client.mapsUrl2)}" target="_blank" rel="noopener" class="btn-maps">📍 Parada 2</a>` : ''}
+        ${btnLlamar}
       </div>
     `;
   } else if (tipo === 'elegir') {
@@ -321,15 +323,17 @@ function renderClientCard(client, index, total) {
       <div class="maps-buttons">
         ${client.mapsUrl1 ? `<a href="${esc(client.mapsUrl1)}" target="_blank" rel="noopener" class="btn-maps btn-maps-choose">📍 Dir. 1</a>` : ''}
         ${client.mapsUrl2 ? `<a href="${esc(client.mapsUrl2)}" target="_blank" rel="noopener" class="btn-maps btn-maps-choose">📍 Dir. 2</a>` : ''}
+        ${btnLlamar}
       </div>
     `;
   } else {
     // única (default)
     const url = client.mapsUrl1 || client.mapsUrl2;
-    if (url) {
+    if (url || btnLlamar) {
       mapsHtml = `
         <div class="maps-buttons">
-          <a href="${esc(url)}" target="_blank" rel="noopener" class="btn-maps">📍 Maps</a>
+          ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" class="btn-maps">📍 Maps</a>` : ''}
+          ${btnLlamar}
         </div>
       `;
     }
@@ -421,6 +425,11 @@ function showEditModal(index) {
     </div>
 
     <div class="form-group">
+      <label for="edit-telefono">Teléfono</label>
+      <input type="tel" id="edit-telefono" value="${esc(client.telefono || '')}">
+    </div>
+
+    <div class="form-group">
       <label for="edit-direccion1">Dirección 1</label>
       <input type="text" id="edit-direccion1" value="${esc(client.direccion1 || '')}">
     </div>
@@ -496,6 +505,11 @@ function showAddClientModal() {
     <div class="form-group">
       <label for="edit-cliente">Cliente *</label>
       <input type="text" id="edit-cliente" value="" required>
+    </div>
+
+    <div class="form-group">
+      <label for="edit-telefono">Teléfono</label>
+      <input type="tel" id="edit-telefono" value="">
     </div>
 
     <div class="form-group">
@@ -660,7 +674,8 @@ function getFormData() {
     direccion2: $('edit-direccion2').value.trim(),
     mapsUrl2: $('edit-mapsUrl2').value.trim(),
     tipoDescarga: $('edit-tipo').value,
-    notas: $('edit-notas').value.trim()
+    notas: $('edit-notas').value.trim(),
+    telefono: $('edit-telefono').value.trim()
   };
 }
 
@@ -680,7 +695,7 @@ function getCurrentGPS(inputId, btn) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       // Generar link de Google Maps
-      const mapsLink = \`https://maps.google.com/?q=\${lat},\${lng}\`;
+      const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
       $(inputId).value = mapsLink;
       showToast('📍 Ubicación obtenida');
       btn.textContent = originalText;
@@ -757,12 +772,14 @@ function renderSearchResults(results, query) {
   container.innerHTML = results.map((client, i) => {
     const tipo = (client.tipoDescarga || 'única').toLowerCase().trim();
     let mapsHtml = '';
+    const btnLlamar = client.telefono ? `<a href="tel:${esc(client.telefono)}" class="btn-maps btn-maps-sm" style="background:var(--primary-dark); flex: 0.8 !important;">📞</a>` : '';
 
     if (tipo === 'ambas') {
       mapsHtml = `
         <div class="maps-buttons">
           ${client.mapsUrl1 ? `<a href="${esc(client.mapsUrl1)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm">📍 P.1</a>` : ''}
           ${client.mapsUrl2 ? `<a href="${esc(client.mapsUrl2)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm">📍 P.2</a>` : ''}
+          ${btnLlamar}
         </div>
       `;
     } else if (tipo === 'elegir') {
@@ -770,14 +787,16 @@ function renderSearchResults(results, query) {
         <div class="maps-buttons">
           ${client.mapsUrl1 ? `<a href="${esc(client.mapsUrl1)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm btn-maps-choose">📍 Dir.1</a>` : ''}
           ${client.mapsUrl2 ? `<a href="${esc(client.mapsUrl2)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm btn-maps-choose">📍 Dir.2</a>` : ''}
+          ${btnLlamar}
         </div>
       `;
     } else {
       const url = client.mapsUrl1 || client.mapsUrl2;
-      if (url) {
+      if (url || btnLlamar) {
         mapsHtml = `
           <div class="maps-buttons">
-            <a href="${esc(url)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm">📍 Maps</a>
+            ${url ? `<a href="${esc(url)}" target="_blank" rel="noopener" class="btn-maps btn-maps-sm">📍 Maps</a>` : ''}
+            ${btnLlamar}
           </div>
         `;
       }
