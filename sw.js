@@ -2,7 +2,7 @@
 // Service Worker — Rutas Europan
 // ============================================================
 
-const CACHE_NAME = 'rutas-europan-v5';
+const CACHE_NAME = 'rutas-europan-v6';
 
 const ASSETS_TO_CACHE = [
   './',

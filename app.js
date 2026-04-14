@@ -7,7 +7,7 @@
 // ==================== CONFIGURACIÓN ==========================
 const CONFIG = {
   // ⬇️ PEGAR AQUÍ la URL del Apps Script tras desplegarlo como Web App
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxOZEXrWu2pfTPlihme8whtIewem-JQuJ2MQgDuFafLPuG0V3IX5-BUg1a0CHHu7uI/exec',
+  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyr7rWC6uiTnAqqyQRHbIMMQ-6VgyWoufHPx6YoJX1xEqnAXjg26Y7Ki1eh5h7uvcw/exec',
 
   DEBOUNCE_MS: 300,
   ROUTES: ['2', '3', '4', '5'],
