@@ -360,9 +360,12 @@ function renderClientCard(client, index, total) {
                   ${isLast ? 'disabled' : ''}
                   aria-label="Bajar">▼</button>
         </div>
-        <div class="client-info">
-          <span class="client-order">${client.orden}</span>
-          <span class="client-name">${esc(client.cliente)}</span>
+        <div class="client-info" style="display: block;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="client-order">${client.orden}</span>
+            <span class="client-name">${esc(client.cliente)}</span>
+          </div>
+          ${client.direccion1 ? `<div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px; padding-left: 36px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(client.direccion1)}</div>` : ''}
         </div>
         <button class="btn-edit" onclick="showEditModal(${index})" aria-label="Editar">✏️</button>
       </div>
@@ -825,8 +828,11 @@ function renderSearchResults(results, query) {
     return `
       <div class="client-card search-result-card" style="animation-delay: ${i * 0.03}s">
         <div class="card-header">
-          <div class="client-info">
-            <span class="client-name">${highlightMatch(client.cliente, query)}</span>
+          <div class="client-info" style="display: block;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="client-name">${highlightMatch(client.cliente, query)}</span>
+            </div>
+            ${client.direccion1 ? `<div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${esc(client.direccion1)}</div>` : ''}
           </div>
         </div>
         <div class="search-meta">Ruta ${client.ruta} · ${client.dia}</div>
